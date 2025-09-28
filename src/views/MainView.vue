@@ -19,15 +19,19 @@
         <el-main :style="{ marginLeft: isCollapse ? '64px' : '180px' }">
 
           <el-breadcrumb separator="/">
-            <transition-group name="move">
-              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-              <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">{{ item }}</el-breadcrumb-item>
+            <transition-group name="breadcrumb">
+              <el-breadcrumb-item :to="{ path: '/' }" key="home">首页</el-breadcrumb-item>
+              <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
+
+                {{ item }}</el-breadcrumb-item>
             </transition-group>
           </el-breadcrumb>
+          <div class="contentBox">
 
-          <transition name="move" mode="out-in">
-            <RouterView />
-          </transition>
+            <transition name="route" mode="out-in">
+              <RouterView :key="$route.fullPath" />
+            </transition>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -47,8 +51,8 @@ const currentPath = ref('/')
 const router = useRouter();
 const route = useRoute()
 const menuList = ref<Menus[]>([]);
-// 获取菜单router
-const findMenuNameByPath = (menus: any, path: any): string[] => {
+//逐级寻找菜单的title
+const findMenuNameByPath = (menus: Menus[], path: string): string[] => {
   let name = []
   for (const item of menus) {
     if (item.children && item.children.length != 0) {
@@ -67,6 +71,8 @@ const findMenuNameByPath = (menus: any, path: any): string[] => {
   }
   return name
 }
+
+// 获取菜单router
 onMounted(async () => {
   const res = await getMenu();
   if (res.data.meta.status === 200) {
@@ -86,7 +92,12 @@ const menuItemClick = (menu: Menus) => {
   console.log(menu.path)
   router.push(menu.path);
   currentPath.value = menu.path
-  breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
+  if (menu.path != '/') {
+
+    breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
+  } else {
+    breadcrumbList.value = []
+  }
 };
 
 // 侧边栏折叠
@@ -129,6 +140,13 @@ const exit = () => {
   }
 
   .el-container {
+    .el-main {
+      overflow: hidden;
+
+      .contentBox {
+        padding: 20px 0 0;
+      }
+    }
 
     .el-aside {
       background-color: #304156;
@@ -159,27 +177,50 @@ const exit = () => {
   }
 }
 
-.move-enter {
+//移入移出动画效果
+/* ========== 面包屑动画 ========== */
+.breadcrumb-enter-from,
+.breadcrumb-leave-to {
+  opacity: 0;
+  transform: translateY(-10%);
+}
+
+.breadcrumb-enter-to,
+.breadcrumb-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.2s ease;
+  position: absolute;
+  /* 短动画 */
+}
+
+/* ========== 路由切换动画 ========== */
+
+.route-enter-from {
   opacity: 0;
   transform: translateX(-10%);
 }
 
-.move-enter-to {
+.route-enter-to {
   opacity: 1;
   transform: translateX(0px);
 }
 
-.move-enter-active,
-.move-leave-active {
+.route-enter-active,
+.route-leave-active {
   transition: all 0.5s;
 }
 
-.move-leave-to {
+.route-leave-to {
   opacity: 0;
   transform: translateX(10%);
 }
 
-.move-leave {
+.route-leave-from {
   opacity: 1;
   transform: translateX(0);
 }
