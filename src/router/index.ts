@@ -16,7 +16,14 @@ const router = createRouter({
           path: 'home',
           name: 'Home',
           component: () => import('../views/HomeView.vue')
-        }
+        }, { path: 'users', component: () => import('@/userViews/usersList.vue'), name: 'users' },
+        { path: 'roles', component: () => import('@/rightsViews/rolesView.vue'), name: 'roles' },
+        { path: 'rights', component: () => import('@/rightsViews/rightsView.vue'), name: 'rights' },
+        { path: 'goods', component: () => import('@/shopViews/shopList.vue'), name: 'goods' },
+        { path: 'params', component: () => import('@/shopViews/paramsView.vue'), name: 'params' },
+        { path: 'categories', component: () => import('@/shopViews/categoriesView.vue'), name: 'categories' },
+        { path: 'orders', component: () => import('@/orderViews/orderList.vue'), name: 'orders' },
+        { path: 'reports', component: () => import('@/dataCount/reportsView.vue'), name: 'reports' },
       ]
     },
 
