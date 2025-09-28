@@ -15,6 +15,7 @@ const router = createRouter({
         {
           path: 'home',
           name: 'Home',
+
           component: () => import('../views/Home/HomeView.vue')
         },
         {
@@ -57,6 +58,7 @@ const router = createRouter({
           name: 'Reports',
           component: () => import('../views/dataStatistics/DataReport.vue')
         },
+
       ]
     },
 
