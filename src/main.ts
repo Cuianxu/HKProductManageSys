@@ -7,7 +7,12 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
+// 全局组件注册
+import SearchForm from './globalComponents/SearchForm.vue'
+
 const app = createApp(App)
+app.component('SearchForm', SearchForm)
+
 
 app.use(createPinia())
 app.use(router)
