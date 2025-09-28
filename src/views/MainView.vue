@@ -19,19 +19,16 @@
         <el-main :style="{ marginLeft: isCollapse ? '64px' : '180px' }">
 
           <el-breadcrumb separator="/">
-            <transition-group name="breadcrumb">
-              <el-breadcrumb-item :to="{ path: '/' }" key="home">首页</el-breadcrumb-item>
-              <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
-
-                {{ item }}</el-breadcrumb-item>
-            </transition-group>
+            <el-breadcrumb-item :to="{ path: '/home' }" key="home">首页</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
+              {{ item }}</el-breadcrumb-item>
           </el-breadcrumb>
-          <div class="contentBox">
 
+          <router-view v-slot="{ Component }">
             <transition name="route" mode="out-in">
-              <RouterView :key="$route.fullPath" />
+              <component :is="Component" />
             </transition>
-          </div>
+          </router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -42,54 +39,52 @@
 import { getMenu } from "@/api/home";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { ElMessage } from "element-plus";
 import type { Menus } from "@/interface";
 import MenuItem from "@/components/MenuItem.vue";
-const breadcrumbList = ref<string[]>([])
-const currentPath = ref('/')
 const router = useRouter();
 const route = useRoute()
+const currentPath = ref('/')
 const menuList = ref<Menus[]>([]);
 //逐级寻找菜单的title
-const findMenuNameByPath = (menus: Menus[], path: string): string[] => {
-  let name = []
-  for (const item of menus) {
-    if (item.children && item.children.length != 0) {
-      name.push(...findMenuNameByPath(item.children, path))
-      if (name.length == 0) {
-        continue
-      } else {
-        name.push(item.authName)
-        return name
-      }
-
-    } else if (item.path == path) {
-      name.push(item.authName)
-      return name
-    }
-  }
-  return name
-}
+import { findMenuNameByPath } from "@/utils/util";
+const breadcrumbList = ref<string[]>([])
 
 // 获取菜单router
 onMounted(async () => {
   const res = await getMenu();
   if (res.data.meta.status === 200) {
-    menuList.value = res.data.data;
-    console.log(menuList.value);
+    menuList.value = [
+      {
+        id: 0,
+        order: 0,
+        path: 'home',
+        authName: '首页',
+        children: []
+      }, ...res.data.data];
     router.push(route.path)
-    currentPath.value = route.path.replace('/', '')
-    breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
   } else {
     ElMessage.error(res.data.meta.msg);
     return;
   }
+  currentPath.value = route.path.replace('/', '')
+  breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
 });
 
+// 监听路由变化,更新面包屑
+watch(() => route.path, (newPath) => {
+  if (newPath === '/') {
+    currentPath.value = 'home'
+    breadcrumbList.value = []
+    return
+  } else {
+    currentPath.value = newPath.replace('/', '')
+    breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
+  }
+})
 // 菜单点击事件
 const menuItemClick = (menu: Menus) => {
-  console.log(menu.path)
   router.push(menu.path);
 };
 
@@ -133,20 +128,12 @@ const exit = () => {
   }
 
   .el-container {
-    .el-main {
-      overflow: hidden;
-
-      .contentBox {
-        padding: 20px 0 0;
-      }
-    }
-
     .el-aside {
       background-color: #304156;
       height: calc(100vh - 60px);
       overflow: hidden;
       position: fixed;
-      transition: width 0.3s;
+      transition: width 0.5s;
 
       .fold_btn {
         text-align: center;
@@ -158,6 +145,11 @@ const exit = () => {
         user-select: none;
       }
     }
+
+    .el-main {
+      overflow: hidden;
+      transition: margin-left 0.5s;
+    }
   }
 
 
@@ -168,53 +160,30 @@ const exit = () => {
       display: none !important;
     }
   }
-}
 
-//移入移出动画效果
-/* ========== 面包屑动画 ========== */
-.breadcrumb-enter-from,
-.breadcrumb-leave-to {
-  opacity: 0;
-  transform: translateY(-10%);
-}
+  .route-enter-from {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
 
-.breadcrumb-enter-to,
-.breadcrumb-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
+  .route-enter-to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 
-.breadcrumb-enter-active,
-.breadcrumb-leave-active {
-  transition: all 0.2s ease;
-  position: absolute;
-  /* 短动画 */
-}
+  .route-enter-active,
+  .route-leave-active {
+    transition: all 0.5s;
+  }
 
-/* ========== 路由切换动画 ========== */
+  .route-leave-to {
+    opacity: 0;
+    transform: translateX(10%);
+  }
 
-.route-enter-from {
-  opacity: 0;
-  transform: translateX(-10%);
-}
-
-.route-enter-to {
-  opacity: 1;
-  transform: translateX(0px);
-}
-
-.route-enter-active,
-.route-leave-active {
-  transition: all 0.5s;
-}
-
-.route-leave-to {
-  opacity: 0;
-  transform: translateX(10%);
-}
-
-.route-leave-from {
-  opacity: 1;
-  transform: translateX(0);
+  .route-leave-from {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>

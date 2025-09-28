@@ -11,7 +11,7 @@
         <MenuItem :menuList="menu.children" @menuItemClick="menuItemClick" />
       </el-sub-menu>
       <el-menu-item v-else :index="menu.path" @click="menuItemClick(menu)">
-        <i :class="['iconfont', 'icon-' + ((menu.path == '/') ? 'reports' : 'menu'), 'menu-icon']"></i>
+        <i :class="['iconfont', 'icon-' + menu.path, 'menu-icon']"></i>
         <template #title>
           <span>{{ menu.authName }}</span>
         </template>
@@ -22,7 +22,6 @@
 
 <script lang="ts" setup>
 
-import { defineProps, defineEmits } from "vue";
 import type { PropType } from "vue";
 import type { Menus } from "@/interface";
 
