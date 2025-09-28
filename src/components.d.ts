@@ -22,6 +22,7 @@ declare module 'vue' {
     MenuItem: typeof import('./components/MenuItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TableView: typeof import('./components/TableView.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
