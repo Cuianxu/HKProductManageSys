@@ -18,5 +18,5 @@ export interface Menus {
   order: number,
   authName: string,
   path: string,
-  children: Menus[]
+  children?: Menus[]
 }

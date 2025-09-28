@@ -12,12 +12,26 @@
         <el-aside :width="isCollapse ? '64px' : '180px'">
           <div class="fold_btn" @click="fold">|||</div>
           <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" background-color="#304156"
-            text-color="#fff" default-active="1" class="el-menu-vertical-demo">
+            text-color="#fff" :default-active="currentPath" class="el-menu-vertical-demo">
             <MenuItem :menuList="menuList" @menuItemClick="menuItemClick" />
           </el-menu>
         </el-aside>
         <el-main :style="{ marginLeft: isCollapse ? '64px' : '180px' }">
-          <router-view></router-view>
+
+          <el-breadcrumb separator="/">
+            <transition-group name="breadcrumb">
+              <el-breadcrumb-item :to="{ path: '/' }" key="home">首页</el-breadcrumb-item>
+              <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
+
+                {{ item }}</el-breadcrumb-item>
+            </transition-group>
+          </el-breadcrumb>
+          <div class="contentBox">
+
+            <transition name="route" mode="out-in">
+              <RouterView :key="$route.fullPath" />
+            </transition>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -26,29 +40,47 @@
 
 <script lang="ts" setup>
 import { getMenu } from "@/api/home";
+import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
 import { ElMessage } from "element-plus";
 import type { Menus } from "@/interface";
 import MenuItem from "@/components/MenuItem.vue";
-
+const breadcrumbList = ref<string[]>([])
+const currentPath = ref('/')
 const router = useRouter();
+const route = useRoute()
 const menuList = ref<Menus[]>([]);
+//逐级寻找菜单的title
+const findMenuNameByPath = (menus: Menus[], path: string): string[] => {
+  let name = []
+  for (const item of menus) {
+    if (item.children && item.children.length != 0) {
+      name.push(...findMenuNameByPath(item.children, path))
+      if (name.length == 0) {
+        continue
+      } else {
+        name.push(item.authName)
+        return name
+      }
+
+    } else if (item.path == path) {
+      name.push(item.authName)
+      return name
+    }
+  }
+  return name
+}
+
 // 获取菜单router
 onMounted(async () => {
   const res = await getMenu();
   if (res.data.meta.status === 200) {
-    menuList.value = [
-      {
-        id: 0,
-        authName: "首页",
-        path: "home",
-        order: 0,
-        children: [],
-      },
-      ...res.data.data,
-    ];
+    menuList.value = res.data.data;
     console.log(menuList.value);
+    router.push(route.path)
+    currentPath.value = route.path.replace('/', '')
+    breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
   } else {
     ElMessage.error(res.data.meta.msg);
     return;
@@ -58,7 +90,7 @@ onMounted(async () => {
 // 菜单点击事件
 const menuItemClick = (menu: Menus) => {
   console.log(menu.path)
-  router.push('/' + menu.path);
+  router.push(menu.path);
 };
 
 // 侧边栏折叠
@@ -101,12 +133,20 @@ const exit = () => {
   }
 
   .el-container {
+    .el-main {
+      overflow: hidden;
+
+      .contentBox {
+        padding: 20px 0 0;
+      }
+    }
 
     .el-aside {
       background-color: #304156;
       height: calc(100vh - 60px);
       overflow: hidden;
       position: fixed;
+      transition: width 0.3s;
 
       .fold_btn {
         text-align: center;
@@ -128,5 +168,53 @@ const exit = () => {
       display: none !important;
     }
   }
+}
+
+//移入移出动画效果
+/* ========== 面包屑动画 ========== */
+.breadcrumb-enter-from,
+.breadcrumb-leave-to {
+  opacity: 0;
+  transform: translateY(-10%);
+}
+
+.breadcrumb-enter-to,
+.breadcrumb-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.2s ease;
+  position: absolute;
+  /* 短动画 */
+}
+
+/* ========== 路由切换动画 ========== */
+
+.route-enter-from {
+  opacity: 0;
+  transform: translateX(-10%);
+}
+
+.route-enter-to {
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.route-enter-active,
+.route-leave-active {
+  transition: all 0.5s;
+}
+
+.route-leave-to {
+  opacity: 0;
+  transform: translateX(10%);
+}
+
+.route-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>
