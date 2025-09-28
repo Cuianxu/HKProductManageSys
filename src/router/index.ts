@@ -15,8 +15,48 @@ const router = createRouter({
         {
           path: 'home',
           name: 'Home',
-          component: () => import('../views/HomeView.vue')
-        }
+          component: () => import('../views/Home/HomeView.vue')
+        },
+        {
+          path: 'users',
+          name: 'Users',
+          component: () => import('../views/userManage/UserList.vue')
+        },
+        {
+          path: 'roles',
+          name: 'Roles',
+          component: () => import('../views/permissionManage/RoleList.vue')
+        },
+        {
+          path: 'rights',
+          name: 'Rights',
+          component: () => import('../views/permissionManage/PermissionList.vue')
+        },
+        {
+          path: 'goods',
+          name: 'Goods',
+          component: () => import('../views/goodsManage/GoodsList.vue')
+        },
+        {
+          path: 'params',
+          name: 'Params',
+          component: () => import('../views/goodsManage/CategoryParam.vue')
+        },
+        {
+          path: 'categories',
+          name: 'Categories',
+          component: () => import('../views/goodsManage/GoodsCategory.vue')
+        },
+        {
+          path: 'orders',
+          name: 'Orders',
+          component: () => import('../views/orderManage/OrderList.vue')
+        },
+        {
+          path: 'reports',
+          name: 'Reports',
+          component: () => import('../views/dataStatistics/DataReport.vue')
+        },
       ]
     },
 
