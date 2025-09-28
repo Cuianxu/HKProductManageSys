@@ -38,7 +38,16 @@ const menuList = ref<Menus[]>([]);
 onMounted(async () => {
   const res = await getMenu();
   if (res.data.meta.status === 200) {
-    menuList.value = res.data.data;
+    menuList.value = [
+      {
+        id: 0,
+        authName: "首页",
+        path: "home",
+        order: 0,
+        children: [],
+      },
+      ...res.data.data,
+    ];
     console.log(menuList.value);
   } else {
     ElMessage.error(res.data.meta.msg);
@@ -49,7 +58,7 @@ onMounted(async () => {
 // 菜单点击事件
 const menuItemClick = (menu: Menus) => {
   console.log(menu.path)
-  router.push(menu.path);
+  router.push('/' + menu.path);
 };
 
 // 侧边栏折叠

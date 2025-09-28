@@ -15,6 +15,7 @@ export interface LoginResponse {
 }
 export interface Menus {
   id: number,
+  order: number,
   authName: string,
   path: string,
   children: Menus[]
