@@ -9,9 +9,12 @@ import router from './router'
 
 // 全局组件注册
 import SearchForm from './globalComponents/SearchForm.vue'
+import TableView from './globalComponents/TableView.vue'
+
+
 
 const app = createApp(App)
-app.component('SearchForm', SearchForm)
+app.component('SearchForm', SearchForm).component('TableView', TableView)
 
 
 app.use(createPinia())

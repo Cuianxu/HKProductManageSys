@@ -16,19 +16,21 @@
             <MenuItem :menuList="menuList" @menuItemClick="menuItemClick" />
           </el-menu>
         </el-aside>
-        <el-main :style="{ marginLeft: isCollapse ? '64px' : '180px' }">
+        <el-main>
 
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }" key="home">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
               {{ item }}</el-breadcrumb-item>
           </el-breadcrumb>
+          <div class="content">
+            <router-view v-slot="{ Component }">
+              <transition name="route" mode="out-in">
+                <component :is="Component" />
+              </transition>
+            </router-view>
+          </div>
 
-          <router-view v-slot="{ Component }">
-            <transition name="route" mode="out-in">
-              <component :is="Component" />
-            </transition>
-          </router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -132,7 +134,6 @@ const exit = () => {
       background-color: #304156;
       height: calc(100vh - 60px);
       overflow: hidden;
-      position: fixed;
       transition: width 0.5s;
 
       .fold_btn {
@@ -149,6 +150,11 @@ const exit = () => {
     .el-main {
       overflow: hidden;
       transition: margin-left 0.5s;
+      background-color: #ddd;
+
+      .content {
+        background-color: #fff;
+      }
     }
   }
 

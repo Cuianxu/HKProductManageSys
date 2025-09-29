@@ -19,7 +19,6 @@ instance.interceptors.request.use((config) => {
 
 
 instance.interceptors.response.use((response) => {
-  console.log(response)
   if (response.data.meta.msg === "无效token") {
     window.localStorage.removeItem("token")
     router.push('/login')
