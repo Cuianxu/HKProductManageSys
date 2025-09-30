@@ -38,5 +38,8 @@ export const $get = <T>(url: string, params = {}, headers = {}) => {
 export const $post = <T>(url: string, data = {}, headers = {}) => {
   return instance.post<T>(url, data, { headers });
 }
+export const $put = <T>(url: string, data: any, headers = {}) => {
+  instance.put<T>(url, data, { headers })
+}
 
 export default instance
