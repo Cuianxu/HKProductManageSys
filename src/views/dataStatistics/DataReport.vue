@@ -47,6 +47,8 @@ onMounted(async () => {
 
     try {
       const res = await getReport()
+      console.log(res);
+
       reportOptions.value = res.data.data
       console.log(reportOptions.value, 111)
       console.log(reportOptions.value.legend.data)

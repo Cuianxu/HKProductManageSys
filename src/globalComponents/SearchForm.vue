@@ -47,4 +47,14 @@ const add = () => {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+::v-deep .el-input__wrapper {
+  border-radius: 4px 0 0 4px;
+  border-right: 0;
+}
+
+::v-deep .el-button {
+  border-left: 0;
+  background-color: #F5F7FA;
+}
+</style>

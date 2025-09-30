@@ -5,6 +5,25 @@ export interface AxiosResponse<T> {
     msg: string
   }
 }
+export interface User {
+
+
+  pagenum: number,
+  total: number,
+  users: UserInfo[]
+
+
+}
+export interface UserInfo {
+  id: number;               // 用户的唯一标识符
+  role_name: string;        // 用户角色名称
+  username: string;         // 用户名
+  create_time: number;      // 创建时间（时间戳）
+  mobile: string;           // 手机号
+  email: string;            // 邮箱
+  mg_state: boolean;        // 管理员状态（true/false）
+}
+
 // 登录响应数据
 export interface LoginResponse {
   email: string,

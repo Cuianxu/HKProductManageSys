@@ -40,6 +40,7 @@
 import { getMenu } from "@/api/home";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
+import { useStore } from "@/stores/store";
 import { onMounted, ref, watch } from "vue";
 import { ElMessage } from "element-plus";
 import type { Menus } from "@/interface";
@@ -51,10 +52,12 @@ const menuList = ref<Menus[]>([]);
 //逐级寻找菜单的title
 import { findMenuNameByPath } from "@/utils/util";
 const breadcrumbList = ref<string[]>([])
-
+const store = useStore()
 // 获取菜单router
 onMounted(async () => {
   const res = await getMenu();
+  console.log(store.token);
+
   if (res.data.meta.status === 200) {
     menuList.value = [
       {
