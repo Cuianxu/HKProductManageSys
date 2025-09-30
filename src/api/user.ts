@@ -2,7 +2,8 @@ import type { AxiosResponse, User } from '@/interface'
 import { $get, $put } from '../utils/request'
 export const getUserList = async (params = {
     pagenum: 1,
-    pagesize: 2
+    pagesize: 2,
+    username: ''
 }) => {
     const res = $get<AxiosResponse<User>>('/users', params)
     return res
