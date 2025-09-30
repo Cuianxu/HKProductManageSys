@@ -14,7 +14,6 @@
   h1 {
     font-weight: bold;
     text-align: center;
-    background-color: #ddd;
   }
 }
 </style>

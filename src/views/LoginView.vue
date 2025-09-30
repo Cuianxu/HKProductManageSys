@@ -55,7 +55,6 @@ const login = async () => {
     if (!valid) return;
     loading.value = true;
     const res = await loginReq(loginFormData);
-    console.log(res);
     if (res.data.meta.status === 200) {
       ElMessage({
         message: res.data.meta.msg,

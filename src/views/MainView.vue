@@ -17,7 +17,6 @@
           </el-menu>
         </el-aside>
         <el-main>
-
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }" key="home">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
@@ -148,12 +147,13 @@ const exit = () => {
     }
 
     .el-main {
-      overflow: hidden;
       transition: margin-left 0.5s;
-      background-color: #ddd;
+      background-color: #eaedf1;
 
       .content {
         background-color: #fff;
+        margin-top: 10px;
+        padding: 10px 20px;
       }
     }
   }
