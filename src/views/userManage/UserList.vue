@@ -54,9 +54,9 @@ const statusUpdate = async (data: any) => {
 const search = async (data: string) => {
   const res = await getUserList({
     pagenum: 1,
-    pagesize: 2, username: data
-  })
-  console.log(res);
+    pagesize: 2
+  }, { username: data })
+  tableData.value = res.data.data.users
 
 }
 
