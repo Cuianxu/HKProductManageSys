@@ -19,19 +19,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { loginReq } from "@/api/login";
 import { useRouter } from "vue-router";
-
+import { useStore } from "@/stores/store";
 const router = useRouter();
 const loginFormRef = ref();
 const loading = ref(false);
-
+const store = useStore()
 const loginFormData = reactive({
   username: "",
   password: "",
 });
+onMounted(() => {
+  console.log(store.token);
 
+})
 // 用户名和密码的校验规则
 const loginFormRules = reactive({
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
@@ -62,6 +65,7 @@ const login = async () => {
         type: "success",
       });
       window.localStorage.setItem("token", res.data.data.token);
+      store.token = res.data.data.token
       router.push("/home");
     } else {
       // 处理非200状态码的错误

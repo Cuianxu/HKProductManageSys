@@ -1,12 +1,12 @@
 import axios from 'axios'
 import router from '../router/index'
 import { ElMessage } from 'element-plus'
-
+import { useStore } from '@/stores/store'
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8888/api/private/v1",
   timeout: 5000,
 })
-
+const store = useStore()
 instance.interceptors.request.use((config) => {
   const token = window.localStorage.getItem('token')
   if (token) {

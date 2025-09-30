@@ -18,7 +18,7 @@
         </el-aside>
         <el-main>
 
-          <el-breadcrumb separator="/">
+          <el-breadcrumb separator="/" class="breadcrumb">
             <el-breadcrumb-item :to="{ path: '/home' }" key="home">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
               {{ item }}</el-breadcrumb-item>
@@ -41,6 +41,7 @@
 import { getMenu } from "@/api/home";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
+import { useStore } from "@/stores/store";
 import { onMounted, ref, watch } from "vue";
 import { ElMessage } from "element-plus";
 import type { Menus } from "@/interface";
@@ -52,10 +53,12 @@ const menuList = ref<Menus[]>([]);
 //逐级寻找菜单的title
 import { findMenuNameByPath } from "@/utils/util";
 const breadcrumbList = ref<string[]>([])
-
+const store = useStore()
 // 获取菜单router
 onMounted(async () => {
   const res = await getMenu();
+  console.log(store.token);
+
   if (res.data.meta.status === 200) {
     menuList.value = [
       {
@@ -150,10 +153,15 @@ const exit = () => {
     .el-main {
       overflow: hidden;
       transition: margin-left 0.5s;
-      background-color: #ddd;
+      background-color: #EAEDF1;
+
+      .breadcrumb {
+        margin-bottom: 15px;
+      }
 
       .content {
         background-color: #fff;
+        padding: 20px;
       }
     }
   }
