@@ -38,8 +38,11 @@ export const $get = <T>(url: string, params = {}, headers = {}) => {
 export const $post = <T>(url: string, data = {}, headers = {}) => {
   return instance.post<T>(url, data, { headers });
 }
-export const $put = <T>(url: string, data: any, headers = {}) => {
+export const $put = <T>(url: string, data = {}, headers = {}) => {
   instance.put<T>(url, data, { headers })
+}
+export const $delete = <T>(url: string, params = {}, headers = {}) => {
+  return instance.delete<T>(url, { params, headers });
 }
 
 export default instance

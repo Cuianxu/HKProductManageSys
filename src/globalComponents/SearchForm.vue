@@ -3,7 +3,7 @@
     <el-form :model="searchFormDataModel" :inline="true" class="demo-form-inline">
       <el-form-item v-for="item in searchFormItems" :key="item.prop">
         <el-input v-if="item.type === 'input'" v-model="searchFormDataModel[item.prop]" :placeholder="item.placeholder"
-          clearable>
+          style="width: 240px" clearable>
           <template #append>
             <el-button :icon="Search" @click="search" />
           </template></el-input>
@@ -21,8 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SearchFormDataInterface } from '@/views/userManage/UserList.vue'
-import type { SearchFormItemInterface } from '@/interface'
+import type { SearchFormItemInterface, SearchFormDataInterface } from '@/interface'
 import type { PropType } from 'vue'
 const searchFormDataModel = defineModel<SearchFormDataInterface>({
   required: true,
@@ -37,9 +36,7 @@ defineProps({
 })
 const emit = defineEmits(['getUser', 'add'])
 const search = () => {
-  console.log(111)
-  console.log(searchFormDataModel.value)
-  emit('getUser', searchFormDataModel.value)
+  emit('getUser')
 }
 // 添加用户
 const add = () => {
@@ -47,14 +44,4 @@ const add = () => {
 }
 </script>
 
-<style lang="less" scoped>
-::v-deep .el-input__wrapper {
-  border-radius: 4px 0 0 4px;
-  border-right: 0;
-}
-
-::v-deep .el-button {
-  border-left: 0;
-  background-color: #F5F7FA;
-}
-</style>
+<style lang="less" scoped></style>

@@ -5,25 +5,6 @@ export interface AxiosResponse<T> {
     msg: string
   }
 }
-export interface User {
-
-
-  pagenum: number,
-  total: number,
-  users: UserInfo[]
-
-
-}
-export interface UserInfo {
-  id: number;               // 用户的唯一标识符
-  role_name: string;        // 用户角色名称
-  username: string;         // 用户名
-  create_time: number;      // 创建时间（时间戳）
-  mobile: string;           // 手机号
-  email: string;            // 邮箱
-  mg_state: boolean;        // 管理员状态（true/false）
-}
-
 // 登录响应数据
 export interface LoginResponse {
   email: string,
@@ -55,7 +36,13 @@ export interface UserListResponse {
     create_time: number,
   }>
 }
-import type { SearchFormDataInterface } from '@/views/userManage/UserList.vue'
+// 搜索表单数据接口
+export interface SearchFormDataInterface {
+  [key: string]: string | number,
+  pagenum: number
+  pagesize: number
+}
+// 搜索表单项接口
 export interface SearchFormItemInterface {
   label: string
   prop: keyof SearchFormDataInterface,
@@ -66,6 +53,19 @@ export interface SearchFormItemInterface {
     value: string
   }[]
 }
+
+// 表格数据接口
+export interface TableDataInterface {
+  readonly id: number,
+  username: string,
+  mobile: string,
+  email: string,
+  role_name?: string,
+  mg_state?: Boolean,
+  create_time?: number,
+  password?: string,
+}
+// 表格列接口
 export interface TableColumnInterface {
   label: string
   prop: string,
