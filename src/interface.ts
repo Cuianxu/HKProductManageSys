@@ -42,6 +42,17 @@ export interface SearchFormDataInterface {
   pagenum: number
   pagesize: number
 }
+// 用户管理表格数据接口
+export interface UserTableDataInterface {
+  readonly id: number,
+  username: string,
+  mobile: string,
+  email: string,
+  role_name?: string,
+  mg_state?: Boolean,
+  create_time?: number,
+  password?: string,
+}
 // 搜索表单项接口
 export interface SearchFormItemInterface {
   label: string
@@ -53,24 +64,12 @@ export interface SearchFormItemInterface {
     value: string
   }[]
 }
-
-// 表格数据接口
-export interface TableDataInterface {
-  readonly id: number,
-  username: string,
-  mobile: string,
-  email: string,
-  role_name?: string,
-  mg_state?: Boolean,
-  create_time?: number,
-  password?: string,
-}
 // 表格列接口
 export interface TableColumnInterface {
   label: string
   prop: string,
   slots?: string,
-  btns?: object & {
+  btns?: {
     edit?: boolean,
     editLabel?: string,
     del?: boolean,
@@ -79,6 +78,26 @@ export interface TableColumnInterface {
     allocateLabel?: string,
   }
 }
+// 权限管理表格数据接口
+// 角色列表
+export interface RoleTableDataInterface {
+  readonly id: number,
+  roleName: string,
+  roleDesc: string,
+  children?: RoleTableDataInterface[]
+}
+// 权限列表
+export interface RightTableDataInterface {
+  readonly id: number,
+  authName: string,
+  level: string,
+  path: string,
+  pid: number,
+}
+
+
+
+
 // 报表响应数据
 export interface ReportResponse {
   legend: {

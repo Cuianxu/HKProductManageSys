@@ -1,6 +1,7 @@
 <template>
   <div class="user-list">
-    <SearchForm v-model="searchFormData" :searchFormItems="searchFormItems" @getUser="getUser" @add="add">
+    <SearchForm v-model="searchFormData" :searchFormItems="searchFormItems" addButtonLabel="添加用户" @getUser="getUser"
+      @add="add">
     </SearchForm>
     <TableView :tableData="tableData" :tableColumns="tableColumns" :total="total" :searchFormData="searchFormData"
       @switchChange="switchChange" @edit="edit" @del="del" @allocate="allocate" @currentChange="currentChange"
@@ -51,7 +52,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive } from 'vue';
 import { getUserList, changeStatus, addUser, editUser, deleteUser, getRoleList, changeRole } from '@/api/userManage'
-import type { SearchFormItemInterface, TableColumnInterface, TableDataInterface, SearchFormDataInterface } from '@/interface'
+import type { SearchFormItemInterface, TableColumnInterface, UserTableDataInterface, SearchFormDataInterface } from '@/interface'
 import type { FormInstance, FormRules } from 'element-plus'
 
 const searchFormData = ref<SearchFormDataInterface>({
@@ -68,7 +69,7 @@ const searchFormItems = ref<SearchFormItemInterface[]>([
   }
 ])
 
-const tableData = ref<TableDataInterface[]>([])
+const tableData = ref<UserTableDataInterface[]>([])
 const tableColumns = ref<TableColumnInterface[]>([
   {
     label: '用户名',
@@ -188,11 +189,11 @@ const confirm = async () => {
   })
 }
 // 切换状态
-const switchChange = (row: TableDataInterface) => {
+const switchChange = (row: UserTableDataInterface) => {
   changeStatus({ id: row.id, status: Boolean(row.mg_state) })
 }
 
-const edit = (row: TableDataInterface) => {
+const edit = (row: UserTableDataInterface) => {
   dialogTitle.value = '编辑用户'
   dialogVisible.value = true
   // 编辑用户时，将用户信息填充到表单中
@@ -202,7 +203,7 @@ const edit = (row: TableDataInterface) => {
   ruleForm.email = row.email
   ruleForm.mobile = row.mobile
 }
-const del = (row: TableDataInterface) => {
+const del = (row: UserTableDataInterface) => {
   ElMessageBox.confirm(
     `确认永久删除用户 ${row.username} 吗？`,
     '提示',
@@ -229,7 +230,7 @@ const del = (row: TableDataInterface) => {
 }
 // 分配角色
 const roleOptions = ref<any[]>([])
-const allocate = (row: TableDataInterface) => {
+const allocate = (row: UserTableDataInterface) => {
   dialogTitle.value = '分配角色'
   // 分配角色时，将用户信息填充到表单中
   ruleForm.id = row.id

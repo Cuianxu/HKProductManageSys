@@ -1,7 +1,7 @@
 <template>
     <div class="table-view">
         <el-table :data="tableData" border style="width: 100%">
-            <el-table-column type="index" :index="0" label="#" align="center" />
+            <el-table-column type="index" :index="1" label="#" align="center" />
             <template v-for="item in tableColumns" :key="item.prop">
                 <el-table-column v-if="item.slots === 'switch'" :label="item.label" align="center" #default="scope">
                     <el-switch v-model="scope.row[item.prop]" @change="handleSwitchChange(scope.row)" />
@@ -17,6 +17,10 @@
                             @click=" handleAllocate(scope.row)"></el-button>
                     </el-tooltip>
                 </el-table-column>
+                <el-table-column v-else-if="item.slots === 'tag'" :label="item.label" #default="scope">
+                    <el-tag v-if="scope.row[item.prop] === 0" type="info">一级</el-tag>
+                    <el-tag v-else type="danger">二级</el-tag>
+                </el-table-column>
                 <el-table-column v-else show-overflow-tooltip :label="item.label" :prop="item.prop" align="center" />
             </template>
         </el-table>
@@ -28,12 +32,12 @@
 </template>
 
 <script setup lang="ts">
-import type { TableDataInterface, SearchFormDataInterface } from '@/views/userManage/UserList.vue'
+import type { UserTableDataInterface, SearchFormDataInterface } from '@/interface'
 import type { TableColumnInterface } from '@/interface'
 import { Delete, Edit, Setting } from '@element-plus/icons-vue'
 defineProps({
     tableData: {
-        type: Object as () => TableDataInterface[],
+        type: Object as () => UserTableDataInterface[],
         required: true,
         default: () => []
     },
@@ -44,7 +48,6 @@ defineProps({
     },
     searchFormData: {
         type: Object as () => SearchFormDataInterface,
-        required: true,
         default: () => ({
             pagenum: 1,
             pagesize: 2
@@ -57,19 +60,19 @@ defineProps({
 })
 const emit = defineEmits(['del', 'edit', 'allocate', 'currentChange', 'sizeChange', 'switchChange'])
 // 切换状态
-const handleSwitchChange = (row: TableDataInterface) => {
+const handleSwitchChange = (row: UserTableDataInterface) => {
     emit('switchChange', row)
 }
 // 切换角色
-const handleAllocate = (row: TableDataInterface) => {
+const handleAllocate = (row: UserTableDataInterface) => {
     emit('allocate', row)
 }
 // 删除
-const handleDelete = (row: TableDataInterface) => {
+const handleDelete = (row: UserTableDataInterface) => {
     emit('del', row)
 }
 // 编辑
-const handleEdit = (row: TableDataInterface) => {
+const handleEdit = (row: UserTableDataInterface) => {
     emit('edit', row)
 }
 const handleSizeChange = (val: number) => {

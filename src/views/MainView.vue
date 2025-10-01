@@ -8,7 +8,7 @@
         </div>
         <el-button type="danger" @click="exit">退出</el-button>
       </el-header>
-      <el-container>
+      <el-container style="margin-top: 60px;">
         <el-aside :width="isCollapse ? '64px' : '180px'">
           <div class="fold_btn" @click="fold">|||</div>
           <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" background-color="#304156"
@@ -16,7 +16,7 @@
             <MenuItem :menuList="menuList" @menuItemClick="menuItemClick" />
           </el-menu>
         </el-aside>
-        <el-main>
+        <el-main :style="{ marginLeft: isCollapse ? '64px' : '180px' }">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }" key="home">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-for="item in breadcrumbList" :key="item">
@@ -114,6 +114,9 @@ const exit = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
 
     .header_left {
       display: flex;
@@ -135,8 +138,8 @@ const exit = () => {
     .el-aside {
       background-color: #304156;
       height: calc(100vh - 60px);
-      overflow: hidden;
       transition: width 0.5s;
+      position: fixed;
 
       .fold_btn {
         text-align: center;

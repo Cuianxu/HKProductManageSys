@@ -1,5 +1,5 @@
 import { $get, $put, $post, $delete } from '@/utils/request'
-import type { UserListResponse, AxiosResponse } from '@/interface'
+import type { UserListResponse, AxiosResponse, RoleTableDataInterface } from '@/interface'
 
 export const getUserList = (params = {
   query: '',
@@ -52,11 +52,7 @@ export const editUser = (params = {
 }
 
 export const getRoleList = () => {
-  return $get<AxiosResponse<{
-    id: number,
-    roleName: string,
-    roleDesc: string,
-  }[]>>('/roles')
+  return $get<AxiosResponse<RoleTableDataInterface[]>>('/roles')
 }
 
 export const changeRole = (id: number, params = {

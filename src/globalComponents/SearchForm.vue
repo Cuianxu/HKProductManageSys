@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="add">添加用户</el-button>
+        <el-button v-if="addButtonLabel" type="primary" @click="add">{{ addButtonLabel }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -23,15 +23,22 @@
 <script setup lang="ts">
 import type { SearchFormItemInterface, SearchFormDataInterface } from '@/interface'
 import type { PropType } from 'vue'
-const searchFormDataModel = defineModel<SearchFormDataInterface>({
-  required: true,
-})
 import { Search } from '@element-plus/icons-vue'
+const searchFormDataModel = defineModel<SearchFormDataInterface>({
+  default: () => ({
+    userName: '',
+    roleName: ''
+  })
+})
+
 defineProps({
   searchFormItems: {
     type: Array as PropType<SearchFormItemInterface[]>,
-    required: true,
     default: () => []
+  },
+  addButtonLabel: {
+    type: String,
+    default: ''
   }
 })
 const emit = defineEmits(['getUser', 'add'])
@@ -40,7 +47,7 @@ const search = () => {
 }
 // 添加用户
 const add = () => {
-  emit('add', searchFormDataModel.value)
+  emit('add')
 }
 </script>
 
