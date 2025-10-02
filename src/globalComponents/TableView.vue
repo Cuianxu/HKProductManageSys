@@ -17,11 +17,15 @@
                             @click=" handleAllocate(scope.row)"></el-button>
                     </el-tooltip>
                 </el-table-column>
-                <el-table-column v-else-if="item.slots === 'tag'" :label="item.label" #default="scope">
-                    <el-tag v-if="scope.row[item.prop] === 0" type="info">一级</el-tag>
-                    <el-tag v-else type="danger">二级</el-tag>
+                <el-table-column v-else-if="item.slots === 'tag'" :label="item.label" #default="scope" align="center">
+                    <template v-if="item.prop === 'level'">
+                        <el-tag v-if="scope.row[item.prop] === '0'" type="primary">一级</el-tag>
+                        <el-tag v-else-if="scope.row[item.prop] === '1'" type="success">二级</el-tag>
+                        <el-tag v-else type="warning">三级</el-tag>
+                    </template>
                 </el-table-column>
-                <el-table-column v-else show-overflow-tooltip :label="item.label" :prop="item.prop" align="center" />
+                <el-table-column v-else show-overflow-tooltip :label="item.label" :prop="item.prop"
+                    :align="item.align ? item.align : 'center'" :width="item.width" />
             </template>
         </el-table>
         <el-pagination v-if="total > 0" :current-page="searchFormData.pagenum" :page-size="searchFormData.pagesize"
@@ -37,7 +41,7 @@ import type { TableColumnInterface } from '@/interface'
 import { Delete, Edit, Setting } from '@element-plus/icons-vue'
 defineProps({
     tableData: {
-        type: Object as () => UserTableDataInterface[],
+        type: Array as () => any[],
         required: true,
         default: () => []
     },

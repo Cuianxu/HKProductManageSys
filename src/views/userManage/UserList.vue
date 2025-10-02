@@ -1,9 +1,9 @@
 <template>
   <div class="user-list">
-    <SearchForm v-model="searchFormData" :searchFormItems="searchFormItems" addButtonLabel="添加用户" @getUser="getUser"
+    <SearchForm v-model="searchFormData" :searchFormItems="searchFormItems" addButtonLabel="添加用户" @search="getUser"
       @add="add">
     </SearchForm>
-    <TableView :tableData="tableData" :tableColumns="tableColumns" :total="total" :searchFormData="searchFormData"
+    <TableView :tableData="userList" :tableColumns="tableColumns" :total="total" :searchFormData="searchFormData"
       @switchChange="switchChange" @edit="edit" @del="del" @allocate="allocate" @currentChange="currentChange"
       @sizeChange="sizeChange">
     </TableView>
@@ -62,14 +62,14 @@ const searchFormData = ref<SearchFormDataInterface>({
 })
 const searchFormItems = ref<SearchFormItemInterface[]>([
   {
-    label: '用户名',
+    label: '',
     prop: 'username',
     placeholder: '请输入用户名',
     type: 'input'
   }
 ])
 
-const tableData = ref<UserTableDataInterface[]>([])
+const userList = ref<UserTableDataInterface[]>([])
 const tableColumns = ref<TableColumnInterface[]>([
   {
     label: '用户名',
@@ -113,7 +113,7 @@ const getUser = (params = {
   pagesize: searchFormData.value.pagesize,
 }) => {
   getUserList(params).then(res => {
-    tableData.value = res.data.data.users
+    userList.value = res.data.data.users
     total.value = res.data.data.total
   })
 }

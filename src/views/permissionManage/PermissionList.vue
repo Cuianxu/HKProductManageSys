@@ -31,9 +31,6 @@ onMounted(() => {
   const res = getRightList().then(res => {
     if (res.data.meta.status === 200) {
       tableData.value = res.data.data
-      tableData.value.forEach(item => {
-        item.level = item.level === "0" ? '一级' : '二级'
-      })
     }
   })
 })

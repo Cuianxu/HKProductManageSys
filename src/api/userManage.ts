@@ -1,7 +1,7 @@
 import { $get, $put, $post, $delete } from '@/utils/request'
-import type { UserListResponse, AxiosResponse, RoleTableDataInterface } from '@/interface'
+import type { UserListResponse, AxiosResponse, RoleTableDataInterface, SearchFormDataInterface } from '@/interface'
 
-export const getUserList = (params = {
+export const getUserList = (params: SearchFormDataInterface = {
   query: '',
   pagenum: 1,
   pagesize: 2,

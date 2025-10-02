@@ -25,7 +25,7 @@
           <div class="content">
             <router-view v-slot="{ Component }">
               <transition name="route" mode="out-in">
-                <component :is="Component" />
+                <component :is="Component" v-model="breadcrumbList" />
               </transition>
             </router-view>
           </div>
@@ -74,6 +74,10 @@ onMounted(async () => {
   }
   currentPath.value = route.path.replace('/', '')
   breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
+  if (currentPath.value === 'goods/add') {
+    breadcrumbList.value = ['商品管理', '添加商品']
+    currentPath.value = 'goods'
+  }
 });
 
 // 监听路由变化,更新面包屑
@@ -83,10 +87,14 @@ watch(() => route.path, (newPath) => {
     breadcrumbList.value = []
     return
   } else {
+    if (currentPath.value === 'goods/add') {
+      breadcrumbList.value = ['商品管理', '添加商品']
+      currentPath.value = 'goods'
+    }
     currentPath.value = newPath.replace('/', '')
     breadcrumbList.value = findMenuNameByPath(menuList.value, currentPath.value).reverse()
   }
-})
+}, { deep: true })
 // 菜单点击事件
 const menuItemClick = (menu: Menus) => {
   router.push(menu.path);
@@ -154,6 +162,7 @@ const exit = () => {
 
     .el-main {
       transition: margin-left 0.5s;
+      height: calc(100vh - 60px);
       background-color: #eaedf1;
 
       .content {

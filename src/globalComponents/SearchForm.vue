@@ -1,7 +1,7 @@
 <template>
   <div class="search-form">
     <el-form :model="searchFormDataModel" :inline="true" class="demo-form-inline">
-      <el-form-item v-for="item in searchFormItems" :key="item.prop">
+      <el-form-item v-for="item in searchFormItems" :key="item.prop" :label="item.label">
         <el-input v-if="item.type === 'input'" v-model="searchFormDataModel[item.prop]" :placeholder="item.placeholder"
           style="width: 240px" clearable>
           <template #append>
@@ -12,6 +12,10 @@
           <el-option v-for="option in item.options" :key="option.value" :label="option.label"
             :value="option.value"></el-option>
         </el-select>
+        <el-cascader v-else-if="item.type === 'cascader'" :placeholder="item.placeholder"
+          v-model="searchFormDataModel[item.prop]" :options="item.options" :props="{
+            expandTrigger: 'hover' as const,
+          }" @change="cascaderChange" />
       </el-form-item>
       <el-form-item>
         <el-button v-if="addButtonLabel" type="primary" @click="add">{{ addButtonLabel }}</el-button>
@@ -41,13 +45,16 @@ defineProps({
     default: ''
   }
 })
-const emit = defineEmits(['getUser', 'add'])
+const emit = defineEmits(['search', 'add', 'categoryChange'])
 const search = () => {
-  emit('getUser')
+  emit('search')
 }
 // 添加用户
 const add = () => {
   emit('add')
+}
+const cascaderChange = (val: any) => {
+  emit('categoryChange', val)
 }
 </script>
 

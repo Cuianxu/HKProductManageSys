@@ -37,11 +37,6 @@ const router = createRouter({
           component: () => import('../views/permissionManage/PermissionList.vue')
         },
         {
-          path: 'goods',
-          name: 'Goods',
-          component: () => import('../views/goodsManage/GoodsList.vue')
-        },
-        {
           path: 'params',
           name: 'Params',
           component: () => import('../views/goodsManage/CategoryParam.vue')
@@ -61,7 +56,21 @@ const router = createRouter({
           name: 'Reports',
           component: () => import('../views/dataStatistics/DataReport.vue')
         },
-
+        {
+          path: '',
+          children: [
+            {
+              path: 'goods',
+              name: 'Goods',
+              component: () => import('../views/goodsManage/GoodsList.vue')
+            },
+            {
+              path: 'goods/add',
+              name: 'AddGoods',
+              component: () => import('../views/goodsManage/AddGoods.vue')
+            }
+          ]
+        },
       ]
     },
 
