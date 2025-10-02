@@ -10,7 +10,8 @@
           <el-input v-model="loginFormData.password" type="password" placeholder="请输入密码" show-password />
         </el-form-item>
         <el-form-item class="login_form_btns">
-          <el-button @click="login" type="primary">登录</el-button>
+          <!-- 这里调用的是防抖之后的函数 -->
+          <el-button @click="debouncedLogin" type="primary">登录</el-button>
           <el-button @click="resetForm" type="info">重置</el-button>
         </el-form-item>
       </el-form>
@@ -23,18 +24,21 @@ import { ref, reactive, onMounted } from "vue";
 import { loginReq } from "@/api/login";
 import { useRouter } from "vue-router";
 import { useStore } from "@/stores/store";
+
 const router = useRouter();
 const loginFormRef = ref();
 const loading = ref(false);
-const store = useStore()
+const store = useStore();
+
 const loginFormData = reactive({
   username: "",
   password: "",
 });
+
 onMounted(() => {
   console.log(store.token);
+});
 
-})
 // 用户名和密码的校验规则
 const loginFormRules = reactive({
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
@@ -49,7 +53,18 @@ const loginFormRules = reactive({
   ],
 });
 
-// 点击登录进行表单校验并跳转welcome页
+// 通用防抖函数封装
+function useDebounce<T extends (...args: any[]) => any>(fn: T, delay = 500) {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  return function (this: any, ...args: Parameters<T>) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+}
+
+// 登录逻辑
 const login = async () => {
   if (!loginFormRef.value) return;
   try {
@@ -64,10 +79,9 @@ const login = async () => {
         type: "success",
       });
       window.localStorage.setItem("token", res.data.data.token);
-      store.token = res.data.data.token
+      store.token = res.data.data.token;
       router.push("/home");
     } else {
-      // 处理非200状态码的错误
       ElMessage({
         message: res.data.meta.msg,
         type: "error",
@@ -89,6 +103,10 @@ const login = async () => {
     loading.value = false;
   }
 };
+
+// 用防抖包装 login
+const debouncedLogin = useDebounce(login, 1000);
+
 // 重置登录表单
 const resetForm = () => {
   loginFormRef.value.resetFields();
@@ -96,35 +114,3 @@ const resetForm = () => {
   loginFormData.password = "";
 };
 </script>
-
-<style lang="less" scoped>
-#login {
-  background: url("../assets/background.jpg");
-  background-size: cover;
-  background-position: center;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .login_form {
-    width: 450px;
-    background: #ffffff26;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(5px);
-
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #333;
-    }
-
-    .login_form_btns {
-      float: right;
-    }
-  }
-}
-</style>
