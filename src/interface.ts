@@ -25,7 +25,7 @@ export interface Menus {
 // 搜索表单数据接口
 export interface SearchFormDataInterface {
   [key: string]: string | number,
-  pagenum: number
+  pagenum: number,
   pagesize: number
 }
 // 搜索表单项接口
@@ -121,7 +121,6 @@ export interface GoodsTableDataInterface {
   upd_time: number,
 }
 // 分类参数
-
 export interface CategoryParamListInterface {
   cat_deleted: boolean,
   cat_id: number,
@@ -129,6 +128,46 @@ export interface CategoryParamListInterface {
   cat_name: string,
   cat_pid: number,
   children?: CategoryParamListInterface[]
+}
+export interface ParamListInterface {
+  attr_id: number,
+  attr_name: string,
+  attr_sel: string,
+  attr_vals: string,
+  attr_write: string,
+  cat_id: number,
+  delete_time: number,
+}
+// 商品分类列表
+export interface goodsCategoryListResponse {
+  pagenum: number,
+  pagesize: number,
+  total: number,
+  result: Array<CategoryParamListInterface>
+}
+
+// 订单管理表格数据接口
+// 订单列表
+export interface OrderListResponse {
+  pagenum: number | string,
+  total: number,
+  goods: Array<OrderTableDataInterface>
+}
+export interface OrderTableDataInterface {
+  consignee_addr: string,
+  create_time: number,
+  is_send: string,
+  order_fapiao_company: string,
+  order_fapiao_content: string,
+  order_fapiao_title: string,
+  order_id: number,
+  order_number: string,
+  order_pay: string,
+  order_price: number,
+  pay_status: string,
+  trade_no: string,
+  update_time: number,
+  user_id: number,
 }
 
 

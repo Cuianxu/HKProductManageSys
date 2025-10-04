@@ -40,7 +40,6 @@ onMounted(async () => {
   const res = await getRoleList()
   if (res.data.meta.status === 200) {
     tableData.value = res.data.data
-    console.log(tableData.value)
   }
 })
 </script>

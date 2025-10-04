@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import router from '@/router'
-import { getGoodsList, addGoods, deleteGoods } from '@/api/goodsManage'
+import { getGoodsList, deleteGoodsItem } from '@/api/goodsManage'
 import type { GoodsTableDataInterface, SearchFormDataInterface, SearchFormItemInterface, TableColumnInterface } from '@/interface'
 
 const goodsList = ref<GoodsTableDataInterface[]>()
@@ -95,7 +95,7 @@ const del = (row: GoodsTableDataInterface) => {
     }
   )
     .then(() => {
-      deleteGoods({ id: row.goods_id }).then(res => {
+      deleteGoodsItem({ id: row.goods_id }).then(res => {
         if (res.data.meta.status === 200) {
           ElMessage.success('删除商品成功')
           getGoods()

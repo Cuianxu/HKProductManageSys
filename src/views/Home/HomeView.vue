@@ -1,6 +1,6 @@
 <template>
   <div class="home-view">
-    <h1>欢迎来到鸿库产品管理系统</h1>
+    <h1>欢迎使用鸿库产品管理系统</h1>
   </div>
 </template>
 

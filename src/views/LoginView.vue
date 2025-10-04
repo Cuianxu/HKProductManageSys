@@ -31,10 +31,6 @@ const loginFormData = reactive({
   username: "",
   password: "",
 });
-onMounted(() => {
-  console.log(store.token);
-
-})
 // 用户名和密码的校验规则
 const loginFormRules = reactive({
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],

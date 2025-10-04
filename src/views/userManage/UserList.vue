@@ -45,7 +45,6 @@
         </div>
       </template>
     </el-dialog>
-
   </div>
 </template>
 
@@ -98,9 +97,7 @@ const tableColumns = ref<TableColumnInterface[]>([
     slots: 'action',
     btns: {
       edit: true,
-      editLabel: '编辑',
       del: true,
-      delLabel: '删除',
       allocate: true,
       allocateLabel: '分配角色',
     }
