@@ -78,7 +78,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to.path, '守卫')
   const token = localStorage.getItem('token')
   if (to.path === '/login') {
     if (token) {

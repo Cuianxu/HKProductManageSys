@@ -12,6 +12,7 @@
 import { onMounted, ref, reactive } from 'vue';
 import { getOrderList } from '@/api/orderManage'
 import type { SearchFormItemInterface, TableColumnInterface, OrderTableDataInterface, SearchFormDataInterface } from '@/interface'
+import dayjs from 'dayjs'
 
 const searchFormData = ref<SearchFormDataInterface>({
   order_number: '',
@@ -27,7 +28,7 @@ const searchFormItems = ref<SearchFormItemInterface[]>([
   }
 ])
 
-const orderList = ref<OrderTableDataInterface[]>([])
+
 const tableColumns = ref<TableColumnInterface[]>([
   {
     label: '订单编号',
@@ -57,6 +58,7 @@ const tableColumns = ref<TableColumnInterface[]>([
     btns: {}
   }
 ])
+const orderList = ref<OrderTableDataInterface[]>([])
 const total = ref<number>(0)
 const getOrder = (params = {
   query: searchFormData.value.order_number as string,
@@ -65,6 +67,10 @@ const getOrder = (params = {
 }) => {
   getOrderList(params).then(res => {
     orderList.value = res.data.data.goods
+    orderList.value.forEach(item => {
+      item.create_time = dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')
+    })
+    console.log(orderList.value)
     total.value = res.data.data.total
   })
 }

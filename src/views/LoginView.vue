@@ -4,10 +4,10 @@
       <h1>登录</h1>
       <el-form ref="loginFormRef" :model="loginFormData" :rules="loginFormRules">
         <el-form-item prop="username">
-          <el-input v-model="loginFormData.username" type="text" placeholder="用户名" />
+          <el-input v-model.trim="loginFormData.username" type="text" placeholder="用户名" />
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="loginFormData.password" type="password" placeholder="请输入密码" show-password />
+          <el-input v-model.trim="loginFormData.password" type="password" placeholder="请输入密码" show-password />
         </el-form-item>
         <el-form-item class="login_form_btns">
           <el-button @click="login" type="primary">登录</el-button>
@@ -28,8 +28,8 @@ const loginFormRef = ref();
 const loading = ref(false);
 const store = useStore()
 const loginFormData = reactive({
-  username: "",
-  password: "",
+  username: "admin",
+  password: "123456",
 });
 // 用户名和密码的校验规则
 const loginFormRules = reactive({

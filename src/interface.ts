@@ -155,7 +155,7 @@ export interface OrderListResponse {
 }
 export interface OrderTableDataInterface {
   consignee_addr: string,
-  create_time: number,
+  create_time: string,
   is_send: string,
   order_fapiao_company: string,
   order_fapiao_content: string,
