@@ -1,6 +1,5 @@
 <template>
-  <div class="report-container">
-    <!-- 图表容器必须有宽高 -->
+  <div class="data-report">
     <div ref="chartRef" class="chart"></div>
   </div>
 </template>
@@ -89,15 +88,24 @@ onMounted(async () => {
     };
 
     myChart.setOption(option);
+    // 图表自适应窗口大小变化
+    myChart?.on('resize', () => {
+      myChart?.resize();
+    });
 
     // 监听窗口大小变化
     window.addEventListener("resize", () => {
       myChart?.resize();
     });
+
   }
 });
 
 onUnmounted(() => {
+  // 移除窗口大小变化事件监听
+  window.removeEventListener("resize", () => {
+    myChart?.resize();
+  });
   if (myChart) {
     myChart.dispose();
   }
@@ -108,14 +116,12 @@ onUnmounted(() => {
 .report-container {
   margin-top: 20px;
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .chart {
-  width: 800px;
   height: 400px;
   padding-top: 20px;
 }
